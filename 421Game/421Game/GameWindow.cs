@@ -30,6 +30,7 @@ namespace _421Game
     public partial class GameWindow : Form
     {
         GameInstance _myGameInstance;
+
         public GameWindow()
         {
             InitializeComponent();
@@ -47,11 +48,23 @@ namespace _421Game
             lblTokensPlayer1.Text = "0";
             lblTokensPlayer2.Text = "0";
             lblTotalTokens.Text = "0";
-            btnPhase.Text = string.Empty;
-
+            lblPhase.Text = string.Empty;
             SetMainComponentsState(false);
 
             btnNewGame.Click += NewGame;
+        }
+
+        internal GameInstance MyGameInstance
+        {
+            get
+            {
+                return _myGameInstance;
+            }
+
+            private set
+            {
+                _myGameInstance = value;
+            }
         }
 
         private void SetMainComponentsState(bool state)
@@ -68,13 +81,62 @@ namespace _421Game
             lblTokensPlayer1.Enabled = state;
             lblTokensPlayer2.Enabled = state;
             lblTotalTokens.Enabled = state;
-            btnPhase.Enabled = state;
+            lblPhase.Enabled = state;
         }
 
         private void NewGame(object sender, EventArgs e)
         {
-            _myGameInstance = new GameInstance();
-            SetMainComponentsState(true);
+            MyGameInstance = new GameInstance();
+            this.Roll(sender, e);
+
+            RefreshView();
+        }
+
+        private void RefreshView()
+        {
+            lblDice1.Text = MyGameInstance.Dice1.LastRoll.ToString();
+            lblDice2.Text = MyGameInstance.Dice2.LastRoll.ToString();
+            lblDice3.Text = MyGameInstance.Dice3.LastRoll.ToString();
+            EnableCurrentPlayerControls();
+        }
+
+        private void EnableCurrentPlayerControls()
+        {
+            switch (MyGameInstance.GamePlayers.CurrentPlayer.Id)
+            {
+                case 0:
+                    SetMainComponentsState(false);
+                    lblPlayer1.Enabled = true;
+                    lblPlaysPlayer1.Enabled = true;
+                    lblScorePlayer1.Enabled = true;
+                    lblTokensPlayer1.Enabled = true;
+                    lblTotalTokens.Enabled = true;
+                    lblPhase.Enabled = true;
+                    gbxDice.Enabled = true;
+                    btnNewGame.Enabled = true;
+                    btnTake.Enabled = true;
+                    btnRoll.Enabled = MyGameInstance.GamePlayers.CurrentPlayer.PlaysLeft > 0 ? true : false;
+                    break;
+                case 1:
+                    SetMainComponentsState(false);
+                    lblPlayer2.Enabled = true;
+                    lblPlaysPlayer2.Enabled = true;
+                    lblScorePlayer2.Enabled = true;
+                    lblTokensPlayer2.Enabled = true;
+                    lblTotalTokens.Enabled = true;
+                    lblPhase.Enabled = true;
+                    gbxDice.Enabled = true;
+                    btnNewGame.Enabled = true;
+                    btnTake.Enabled = true;
+                    btnRoll.Enabled = MyGameInstance.GamePlayers.CurrentPlayer.PlaysLeft > 0 ? true : false;
+                    break;
+            }
+        }
+
+        private void Roll(object sender, EventArgs e)
+        {
+            MyGameInstance.RollDices(true, true, true);
+            RefreshView();
         }
     }
 }
