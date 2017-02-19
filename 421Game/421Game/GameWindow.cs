@@ -97,6 +97,9 @@ namespace _421Game
             lblDice1.Text = MyGameInstance.Dice1.LastRoll.ToString();
             lblDice2.Text = MyGameInstance.Dice2.LastRoll.ToString();
             lblDice3.Text = MyGameInstance.Dice3.LastRoll.ToString();
+            lblScorePlayer1.Text = MyGameInstance.GamePlayers.GamePlayers[1].PlayerValue.ToString();
+            lblScorePlayer2.Text = MyGameInstance.GamePlayers.GamePlayers[0].PlayerValue.ToString();
+            lblTotalTokens.Text = MyGameInstance.Tokens.ToString();
             EnableCurrentPlayerControls();
         }
 
@@ -136,6 +139,12 @@ namespace _421Game
         private void Roll(object sender, EventArgs e)
         {
             MyGameInstance.RollDices(true, true, true);
+            RefreshView();
+        }
+
+        private void Take(object sender, EventArgs e)
+        {
+            MyGameInstance.CurrentPlayerTakes();
             RefreshView();
         }
     }

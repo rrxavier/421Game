@@ -13,14 +13,22 @@ namespace _421Game
         private Dice _dice2;
         private Dice _dice3;
         private Players _players;
+        private int _tokens;
 
         public GameInstance(string player1, string player2)
         {
+            // I reversed their IDs so it's easier for me to finish a turn.
             this._players = new Players(new Player[2] { new Player(player1, 1), new Player(player2, 0) });
             this._dice1 = new Dice();
             this._dice2 = new Dice();
             this._dice3 = new Dice();
+            this._tokens = 20;
         }
+
+        /// <summary>
+        /// If the players didn't chose a name.
+        /// </summary>
+        public GameInstance() : this("Player1", "Player2") { }
 
         public Dice Dice1
         {
@@ -44,6 +52,12 @@ namespace _421Game
         {
             get
             { return _players; }
+            set { _players = value; }
+        }
+
+        public int Tokens
+        {
+            get { return _tokens; }
         }
 
         /// <summary>
@@ -61,14 +75,25 @@ namespace _421Game
             if (dice3)
                 Dice3.Roll();
 
-            // À FINIR (Tri)
-            // GamePlayers.CurrentPlayer.PlayerValue = Convert.ToInt32(new string((Dice1.ToString() + Dice2.ToString() + Dice3.ToString()).ToArray()));
+            char[] arrayTmp = (Dice1.ToString() + Dice2.ToString() + Dice3.ToString()).ToArray();
+            Array.Sort(arrayTmp);
+            Array.Reverse(arrayTmp);
+            GamePlayers.CurrentPlayer.PlayerValue = Convert.ToInt32(new string(arrayTmp));
         }
 
-        /// <summary>
-        /// If the players didn't chose a name.
-        /// </summary>
-        public GameInstance() : this("Player1", "Player2") { }
+        public void CurrentPlayerTakes()
+        {
+
+            if (GamePlayers.GamePlayers[0].PlayerValue > 0 && GamePlayers.GamePlayers[1].PlayerValue > 0)
+            {
+                // Code pour changer de tour.
+            }
+            else
+            {
+                // À FINIR -> À FAIRE EN SORTE QUE ÇA MARCHE !!!
+                //GamePlayers.CurrentPlayer = GamePlayers.NextPlayer();
+            }
+        }
 
         public class Dice
         {
@@ -104,7 +129,7 @@ namespace _421Game
         }
 
         /// <summary>
-        /// Class for a better handling of all players. Uses the Player struct. 
+        /// Class for a better handling of all players. Uses the Player class
         /// </summary>
         public struct Players
         {
@@ -125,11 +150,18 @@ namespace _421Game
             public Player CurrentPlayer
             {
                 get { return _currentPlayer; }
+                set { _currentPlayer = value; }
+            }
+
+            public Player NextPlayer()
+            {
+                this._currentPlayer = this.GamePlayers[this.CurrentPlayer.Id];
+                return this.CurrentPlayer;
             }
         }
 
         /// <summary>
-        /// Stuct for a better handling of one player.
+        /// Class for a better handling of one player.
         /// </summary>
         public class Player
         {

@@ -35,6 +35,9 @@
             this.lblPlaysPlayer2 = new System.Windows.Forms.Label();
             this.lblPlayer2 = new System.Windows.Forms.Label();
             this.gbxDice = new System.Windows.Forms.GroupBox();
+            this.lblDice3 = new System.Windows.Forms.Label();
+            this.lblDice2 = new System.Windows.Forms.Label();
+            this.lblDice1 = new System.Windows.Forms.Label();
             this.btnRoll = new System.Windows.Forms.Button();
             this.btnTake = new System.Windows.Forms.Button();
             this.lblTotalTokens = new System.Windows.Forms.Label();
@@ -42,9 +45,6 @@
             this.lblTokensPlayer2 = new System.Windows.Forms.Label();
             this.btnNewGame = new System.Windows.Forms.Button();
             this.lblPhase = new System.Windows.Forms.Label();
-            this.lblDice1 = new System.Windows.Forms.Label();
-            this.lblDice2 = new System.Windows.Forms.Label();
-            this.lblDice3 = new System.Windows.Forms.Label();
             this.gbxDice.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -111,6 +111,36 @@
             this.gbxDice.TabStop = false;
             this.gbxDice.Text = "groupBox1";
             // 
+            // lblDice3
+            // 
+            this.lblDice3.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDice3.Location = new System.Drawing.Point(328, 23);
+            this.lblDice3.Name = "lblDice3";
+            this.lblDice3.Size = new System.Drawing.Size(96, 54);
+            this.lblDice3.TabIndex = 17;
+            this.lblDice3.Text = "label3";
+            this.lblDice3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblDice2
+            // 
+            this.lblDice2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDice2.Location = new System.Drawing.Point(176, 23);
+            this.lblDice2.Name = "lblDice2";
+            this.lblDice2.Size = new System.Drawing.Size(96, 54);
+            this.lblDice2.TabIndex = 16;
+            this.lblDice2.Text = "label2";
+            this.lblDice2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblDice1
+            // 
+            this.lblDice1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDice1.Location = new System.Drawing.Point(19, 23);
+            this.lblDice1.Name = "lblDice1";
+            this.lblDice1.Size = new System.Drawing.Size(96, 54);
+            this.lblDice1.TabIndex = 15;
+            this.lblDice1.Text = "label1";
+            this.lblDice1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // btnRoll
             // 
             this.btnRoll.Location = new System.Drawing.Point(168, 165);
@@ -129,6 +159,7 @@
             this.btnTake.TabIndex = 9;
             this.btnTake.Text = "button2";
             this.btnTake.UseVisualStyleBackColor = true;
+            this.btnTake.Click += new System.EventHandler(this.Take);
             // 
             // lblTotalTokens
             // 
@@ -178,36 +209,6 @@
             this.lblPhase.TabIndex = 14;
             this.lblPhase.Text = "label1";
             this.lblPhase.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblDice1
-            // 
-            this.lblDice1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDice1.Location = new System.Drawing.Point(19, 23);
-            this.lblDice1.Name = "lblDice1";
-            this.lblDice1.Size = new System.Drawing.Size(96, 54);
-            this.lblDice1.TabIndex = 15;
-            this.lblDice1.Text = "label1";
-            this.lblDice1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblDice2
-            // 
-            this.lblDice2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDice2.Location = new System.Drawing.Point(176, 23);
-            this.lblDice2.Name = "lblDice2";
-            this.lblDice2.Size = new System.Drawing.Size(96, 54);
-            this.lblDice2.TabIndex = 16;
-            this.lblDice2.Text = "label2";
-            this.lblDice2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblDice3
-            // 
-            this.lblDice3.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDice3.Location = new System.Drawing.Point(328, 23);
-            this.lblDice3.Name = "lblDice3";
-            this.lblDice3.Size = new System.Drawing.Size(96, 54);
-            this.lblDice3.TabIndex = 17;
-            this.lblDice3.Text = "label3";
-            this.lblDice3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // GameWindow
             // 
