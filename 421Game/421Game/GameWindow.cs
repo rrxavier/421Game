@@ -97,8 +97,8 @@ namespace _421Game
             lblDice1.Text = MyGameInstance.Dice1.LastRoll.ToString();
             lblDice2.Text = MyGameInstance.Dice2.LastRoll.ToString();
             lblDice3.Text = MyGameInstance.Dice3.LastRoll.ToString();
-            lblScorePlayer1.Text = MyGameInstance.GamePlayers.GamePlayers[1].PlayerValue.ToString();
-            lblScorePlayer2.Text = MyGameInstance.GamePlayers.GamePlayers[0].PlayerValue.ToString();
+            lblScorePlayer1.Text = MyGameInstance.GamePlayers.GamePlayers[1].PlayerScore.ToString();
+            lblScorePlayer2.Text = MyGameInstance.GamePlayers.GamePlayers[0].PlayerScore.ToString();
             lblTotalTokens.Text = MyGameInstance.Tokens.ToString();
             EnableCurrentPlayerControls();
         }
@@ -117,7 +117,7 @@ namespace _421Game
                     lblPhase.Enabled = true;
                     gbxDice.Enabled = true;
                     btnNewGame.Enabled = true;
-                    btnTake.Enabled = true;
+                    btnTake.Enabled = (MyGameInstance.Dice1.LastRoll == 0 && MyGameInstance.Dice1.LastRoll == 0 && MyGameInstance.Dice1.LastRoll == 0) ? false : true;
                     btnRoll.Enabled = MyGameInstance.GamePlayers.CurrentPlayer.PlaysLeft > 0 ? true : false;
                     break;
                 case 1:
@@ -130,7 +130,7 @@ namespace _421Game
                     lblPhase.Enabled = true;
                     gbxDice.Enabled = true;
                     btnNewGame.Enabled = true;
-                    btnTake.Enabled = true;
+                    btnTake.Enabled = (MyGameInstance.Dice1.LastRoll == 0 && MyGameInstance.Dice1.LastRoll == 0 && MyGameInstance.Dice1.LastRoll == 0) ? false : true;
                     btnRoll.Enabled = MyGameInstance.GamePlayers.CurrentPlayer.PlaysLeft > 0 ? true : false;
                     break;
             }
