@@ -30,8 +30,8 @@
         {
             this.lblPlayer1 = new System.Windows.Forms.Label();
             this.lblPlaysPlayer1 = new System.Windows.Forms.Label();
-            this.lblScorePlayer1 = new System.Windows.Forms.Label();
-            this.lblScorePlayer2 = new System.Windows.Forms.Label();
+            this.lblDiceRollPlayer1 = new System.Windows.Forms.Label();
+            this.lblDiceRollPlayer2 = new System.Windows.Forms.Label();
             this.lblPlaysPlayer2 = new System.Windows.Forms.Label();
             this.lblPlayer2 = new System.Windows.Forms.Label();
             this.gbxDice = new System.Windows.Forms.GroupBox();
@@ -64,22 +64,22 @@
             this.lblPlaysPlayer1.TabIndex = 2;
             this.lblPlaysPlayer1.Text = "lblPlaysPlayer1";
             // 
-            // lblScorePlayer1
+            // lblDiceRollPlayer1
             // 
-            this.lblScorePlayer1.Location = new System.Drawing.Point(12, 109);
-            this.lblScorePlayer1.Name = "lblScorePlayer1";
-            this.lblScorePlayer1.Size = new System.Drawing.Size(103, 13);
-            this.lblScorePlayer1.TabIndex = 3;
-            this.lblScorePlayer1.Text = "label1";
+            this.lblDiceRollPlayer1.Location = new System.Drawing.Point(12, 109);
+            this.lblDiceRollPlayer1.Name = "lblDiceRollPlayer1";
+            this.lblDiceRollPlayer1.Size = new System.Drawing.Size(103, 13);
+            this.lblDiceRollPlayer1.TabIndex = 3;
+            this.lblDiceRollPlayer1.Text = "label1";
             // 
-            // lblScorePlayer2
+            // lblDiceRollPlayer2
             // 
-            this.lblScorePlayer2.Location = new System.Drawing.Point(625, 109);
-            this.lblScorePlayer2.Name = "lblScorePlayer2";
-            this.lblScorePlayer2.Size = new System.Drawing.Size(101, 13);
-            this.lblScorePlayer2.TabIndex = 6;
-            this.lblScorePlayer2.Text = "label1";
-            this.lblScorePlayer2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDiceRollPlayer2.Location = new System.Drawing.Point(625, 109);
+            this.lblDiceRollPlayer2.Name = "lblDiceRollPlayer2";
+            this.lblDiceRollPlayer2.Size = new System.Drawing.Size(101, 13);
+            this.lblDiceRollPlayer2.TabIndex = 6;
+            this.lblDiceRollPlayer2.Text = "label1";
+            this.lblDiceRollPlayer2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblPlaysPlayer2
             // 
@@ -223,10 +223,10 @@
             this.Controls.Add(this.btnTake);
             this.Controls.Add(this.btnRoll);
             this.Controls.Add(this.gbxDice);
-            this.Controls.Add(this.lblScorePlayer2);
+            this.Controls.Add(this.lblDiceRollPlayer2);
             this.Controls.Add(this.lblPlaysPlayer2);
             this.Controls.Add(this.lblPlayer2);
-            this.Controls.Add(this.lblScorePlayer1);
+            this.Controls.Add(this.lblDiceRollPlayer1);
             this.Controls.Add(this.lblPlaysPlayer1);
             this.Controls.Add(this.lblPlayer1);
             this.Name = "GameWindow";
@@ -240,8 +240,8 @@
 
         private System.Windows.Forms.Label lblPlayer1;
         private System.Windows.Forms.Label lblPlaysPlayer1;
-        private System.Windows.Forms.Label lblScorePlayer1;
-        private System.Windows.Forms.Label lblScorePlayer2;
+        private System.Windows.Forms.Label lblDiceRollPlayer1;
+        private System.Windows.Forms.Label lblDiceRollPlayer2;
         private System.Windows.Forms.Label lblPlaysPlayer2;
         private System.Windows.Forms.Label lblPlayer2;
         private System.Windows.Forms.GroupBox gbxDice;
@@ -251,10 +251,10 @@
         private System.Windows.Forms.Label lblTokensPlayer1;
         private System.Windows.Forms.Label lblTokensPlayer2;
         private System.Windows.Forms.Button btnNewGame;
-        private System.Windows.Forms.Label lblPhase;
         private System.Windows.Forms.Label lblDice3;
         private System.Windows.Forms.Label lblDice2;
         private System.Windows.Forms.Label lblDice1;
+        private System.Windows.Forms.Label lblPhase;
     }
 }
 

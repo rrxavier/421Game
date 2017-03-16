@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace _421Game
 {
@@ -58,6 +59,7 @@ namespace _421Game
         public int Tokens
         {
             get { return _tokens; }
+            private set { _tokens = value; }
         }
 
         /// <summary>
@@ -79,26 +81,42 @@ namespace _421Game
             char[] arrayTmp = (Dice1.ToString() + Dice2.ToString() + Dice3.ToString()).ToArray();
             Array.Sort(arrayTmp);
             Array.Reverse(arrayTmp);
-            GamePlayers.CurrentPlayer.PlayerScore = Convert.ToInt32(new string(arrayTmp));
+            GamePlayers.CurrentPlayer.DiceRoll = Convert.ToInt32(new string(arrayTmp));
 
             GamePlayers.CurrentPlayer.PlaysLeft--;
         }
 
         public void CurrentPlayerTakes()
         {
-            if (GamePlayers.GamePlayers[0].PlayerScore > 0 && GamePlayers.GamePlayers[1].PlayerScore > 0)
+            if (GamePlayers.GamePlayers[0].DiceRoll > 0 && GamePlayers.GamePlayers[1].DiceRoll > 0)
             {
-                // À REMETTRE EN PLACE
-                if (GamePlayers.GamePlayers[0].PlayerScore.Is421)
-                    System.Windows.Forms.MessageBox.Show("421 !!!");
-                else if (GamePlayers.GamePlayers[0].PlayerScore.IsMac)
-                    System.Windows.Forms.MessageBox.Show("Mac !!!");
-                else if (GamePlayers.GamePlayers[0].PlayerScore.IsSuite)
-                    System.Windows.Forms.MessageBox.Show("Suite !!!");
-                else if (GamePlayers.GamePlayers[0].PlayerScore.IsNenette)
-                    System.Windows.Forms.MessageBox.Show("Nénette !!!");
+                if (GamePlayers.GamePlayers[0].Combi.Priority > GamePlayers.GamePlayers[1].Combi.Priority)
+                {
+                    GamePlayers.GamePlayers[1].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
+                    Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;
+                }
+                else if (GamePlayers.GamePlayers[0].Combi.Priority < GamePlayers.GamePlayers[1].Combi.Priority)
+                {
+                    GamePlayers.GamePlayers[0].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
+                    Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;
+                }
                 else
-                    System.Windows.Forms.MessageBox.Show("Loul !!!");
+                {
+                    if (GamePlayers.GamePlayers[0].DiceRoll > GamePlayers.GamePlayers[1].DiceRoll)
+                    {
+                        GamePlayers.GamePlayers[1].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
+                        Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;
+                    }
+                    else if (GamePlayers.GamePlayers[0].DiceRoll < GamePlayers.GamePlayers[1].DiceRoll)
+                    {
+                        GamePlayers.GamePlayers[0].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
+                        Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;
+                    }
+                }
+
+                GamePlayers.ResetRolls();
+                GamePlayers.CurrentPlayer.PlaysLeft = 1;
+                ResetDices();
             }
             else
             {
@@ -139,7 +157,7 @@ namespace _421Game
             {
                 // 7 Because the last value's exclusive.
                 _lastRoll = new Random().Next(1, 7);
-                Thread.Sleep(10);
+                Thread.Sleep(25);
             }
 
             public void Reset()
@@ -182,6 +200,12 @@ namespace _421Game
             {
                 this._currentPlayer = GamePlayers[this.CurrentPlayer.Id];
             }
+
+            public void ResetRolls()
+            {
+                _playersArray[0].ResetRoll();
+                _playersArray[1].ResetRoll();
+            }
         }
 
         /// <summary>
@@ -192,15 +216,16 @@ namespace _421Game
             string _username;
             int _id;
             int _playsLeft;
-            Score _playerScore;
-            int _points;
+            int _diceRoll;
+            int _tokens;
 
             public Player(string username, int id)
             {
                 this._username = username;
                 this._id = id;
                 this._playsLeft = 0;
-                this._playerScore = 000;
+                this._diceRoll = 000;
+                this._tokens = 0;
             }
 
             public string Username
@@ -219,23 +244,33 @@ namespace _421Game
                 set { _playsLeft = value; }
             }
 
-            public Score PlayerScore
+            public int DiceRoll
             {
-                get { return _playerScore; }
-                set { _playerScore = value; }
+                get { return _diceRoll; }
+                set { _diceRoll = value; }
             }
 
-            public int Points
+            public Combination Combi
             {
-                get { return _points; }
-                set { _points = value; }
+                get { return Combinations.GetCorrectCombination(this._diceRoll); }
+            }
+
+            public int Tokens
+            {
+                get { return _tokens; }
+                set { _tokens = value; }
+            }
+
+            public void ResetRoll()
+            {
+                DiceRoll = 000;
             }
         }
 
         /// <summary>
         /// Class for a better handling of the players scores.
         /// </summary>
-        public class Score
+        /*public class Score
         {
             private int _value;
 
@@ -251,7 +286,28 @@ namespace _421Game
                 get { return _value; }
             }
 
-            public bool Is421
+            public int Priority
+            {
+                get
+                {
+                    int priority;
+                    if (this.Is421)
+                        priority = 6;
+                    else if (this.IsMac)
+                        priority = 5;
+                    else if (this.IsBrelan)
+                        priority = 4;
+                    else if (this.IsSuite)
+                        priority = 3;
+                    else if (this.IsNenette)
+                        priority = 2;
+                    else
+                        priority = 1;
+                    return priority;
+                }
+            }
+
+            private bool Is421
             {
                 get
                 {
@@ -262,12 +318,10 @@ namespace _421Game
                 }
             }
 
-            public bool IsMac
+            private bool IsMac
             {
                 get
                 {
-                    //GamePlayers.GamePlayers[0].Points = Convert.ToInt32(GamePlayers.GamePlayers[0].PlayerScore.ToString().Substring(0, 1));
-
                     // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
                     // So ifthe modulo returns 0, it means that there are two numbers that are the same.
                     if (Convert.ToInt32(this.Value.ToString().Substring(1)) % 11 == 0)
@@ -277,7 +331,21 @@ namespace _421Game
                 }
             }
 
-            public bool IsSuite
+            private bool IsBrelan
+            {
+                get
+                {
+                    // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
+                    // So if the modulo returns 0, it means that there are two numbers that are the same.
+                    // Then, I check if the first digit is the same as the last one.
+                    if (Convert.ToInt32(this.Value.ToString().Substring(1)) % 11 == 0 && this.Value.ToString()[0] == this.Value.ToString()[2])
+                        return true;
+                    else
+                        return false;
+                }
+            }
+
+            private bool IsSuite
             {
                 get
                 {
@@ -297,7 +365,7 @@ namespace _421Game
                 }
             }
 
-            public bool IsNenette
+            private bool IsNenette
             {
                 get
                 {
@@ -323,6 +391,146 @@ namespace _421Game
             public override string ToString()
             {
                 return Value.ToString();
+            }
+        }*/
+        
+        /// <summary>
+        /// Class that returns the correct Combination.
+        /// </summary>
+        public static class Combinations
+        {
+            public static Combination GetCorrectCombination(int diceRoll)
+            {
+                if (Is421(diceRoll))
+                    return Get421();
+                else if (IsMac(diceRoll))
+                    return GetMac(diceRoll);
+                else if (IsBrelan(diceRoll))
+                    return GetBrelan(diceRoll);
+                else if (IsSuite(diceRoll))
+                    return GetSuite();
+                else if (IsNenette(diceRoll))
+                    return GetNennette();
+                else
+                    return GetOther();
+            }
+
+            private static bool Is421(int diceRoll)
+            {
+                    if (diceRoll == 421)
+                        return true;
+                    else
+                        return false;
+            }
+
+            private static bool IsMac(int diceRoll)
+            {
+                    // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
+                    // So ifthe modulo returns 0, it means that there are two numbers that are the same.
+                    if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0)
+                        return true;
+                    else
+                        return false;
+            }
+
+            private static bool IsBrelan(int diceRoll)
+            {
+                    // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
+                    // So if the modulo returns 0, it means that there are two numbers that are the same.
+                    // Then, I check if the first digit is the same as the last one.
+                    if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 && diceRoll.ToString()[0] == diceRoll.ToString()[2])
+                        return true;
+                    else
+                        return false;
+            }
+
+            private static bool IsSuite(int diceRoll)
+            {
+                    var digitsList = new List<int>();
+
+                    // Taking each digit individually
+                    for (int tmpValue = diceRoll; tmpValue != 0; tmpValue /= 10)
+                        digitsList.Add(tmpValue % 10);
+
+                    int[] digitsArray = digitsList.ToArray();
+                    Array.Reverse(digitsArray);
+
+                    if (digitsArray[2] + 1 == digitsArray[1] && digitsArray[1] + 1 == digitsArray[0])
+                        return true;
+                    else
+                        return false;
+            }
+
+            private static bool IsNenette(int diceRoll)
+            {
+                    if (diceRoll == 221)
+                        return true;
+                    else
+                        return false;
+            }
+
+            private static Combination Get421()
+            {
+                return new Combination(6, 10, "421");
+            }
+
+            private static Combination GetMac(int diceRoll)
+            {
+                int tokenValue = Convert.ToInt32(diceRoll.ToString()[0].ToString());
+                    return new Combination(5, tokenValue, "Mac");
+            }
+
+            private static Combination GetBrelan(int diceRoll)
+            {
+                int tokenValue = Convert.ToInt32(diceRoll.ToString()[0].ToString());
+                return new Combination(4, tokenValue, "Brelan");
+            }
+
+            private static Combination GetSuite()
+            {
+                return new Combination(3, 2, "Suite");
+            }
+
+            private static Combination GetNennette()
+            {
+                return new Combination(2, 4, "Nennette");
+            }
+
+            private static Combination GetOther()
+            {
+                return new Combination(1, 1, "Normal combination");
+            }
+        }
+
+        /// <summary>
+        /// Combination class.
+        /// </summary>
+        public struct Combination
+        {
+            int _priority;
+            int _tokenValue;
+            string _name;
+
+            public Combination(int priority, int tokenValue, string name)
+            {
+                this._name = name;
+                this._priority = priority;
+                this._tokenValue = tokenValue;
+            }
+
+            public int Priority
+            {
+                get { return _priority; }
+            }
+
+            public int TokenValue
+            {
+                get { return _tokenValue; }
+            }
+
+            public string Name
+            {
+                get { return _name; }
             }
         }
     }

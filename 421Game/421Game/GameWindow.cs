@@ -35,23 +35,37 @@ namespace _421Game
         {
             InitializeComponent();
 
+            lblDice1.Text = string.Empty;
+            lblDice2.Text = string.Empty;
+            lblDice3.Text = string.Empty;
             lblPlayer1.Text = "Player 1";
             lblPlayer2.Text = "Player 2";
             lblPlaysPlayer1.Text = "Plays left : 0";
             lblPlaysPlayer2.Text = "Plays left : 0";
-            lblScorePlayer1.Text = "000";
-            lblScorePlayer2.Text = "000";
+            lblDiceRollPlayer1.Text = "Dice Roll : 0";
+            lblDiceRollPlayer2.Text = "Dice Roll : 0";
             gbxDice.Text = "Dice :";
             btnRoll.Text = "Roll";
             btnTake.Text = "Take";
             btnNewGame.Text = "New game";
-            lblTokensPlayer1.Text = "0";
-            lblTokensPlayer2.Text = "0";
+            lblTokensPlayer1.Text = "Tokens\n0";
+            lblTokensPlayer2.Text = "Tokens\n0";
             lblTotalTokens.Text = "0";
             lblPhase.Text = string.Empty;
             SetMainComponentsState(false);
+            var test = new
+            {
+                amount = 108, Message = "test"
+            };
 
-            btnNewGame.Click += NewGame;
+            // New game
+            btnNewGame.Click += delegate (object sender, EventArgs e)
+            {
+                MyGameInstance = new GameInstance();
+                this.Roll(sender, e);
+
+                RefreshView();
+            };
         }
 
         internal GameInstance MyGameInstance
@@ -73,8 +87,8 @@ namespace _421Game
             lblPlayer2.Enabled = state;
             lblPlaysPlayer1.Enabled = state;
             lblPlaysPlayer2.Enabled = state;
-            lblScorePlayer1.Enabled = state;
-            lblScorePlayer2.Enabled = state;
+            lblDiceRollPlayer1.Enabled = state;
+            lblDiceRollPlayer2.Enabled = state;
             gbxDice.Enabled = state;
             btnRoll.Enabled = state;
             btnTake.Enabled = state;
@@ -84,21 +98,15 @@ namespace _421Game
             lblPhase.Enabled = state;
         }
 
-        private void NewGame(object sender, EventArgs e)
-        {
-            MyGameInstance = new GameInstance();
-            this.Roll(sender, e);
-
-            RefreshView();
-        }
-
         private void RefreshView()
         {
             lblDice1.Text = MyGameInstance.Dice1.LastRoll.ToString();
             lblDice2.Text = MyGameInstance.Dice2.LastRoll.ToString();
             lblDice3.Text = MyGameInstance.Dice3.LastRoll.ToString();
-            lblScorePlayer1.Text = MyGameInstance.GamePlayers.GamePlayers[1].PlayerScore.ToString();
-            lblScorePlayer2.Text = MyGameInstance.GamePlayers.GamePlayers[0].PlayerScore.ToString();
+            lblDiceRollPlayer1.Text = string.Format("Dice Roll : {0}", MyGameInstance.GamePlayers.GamePlayers[1].DiceRoll.ToString());
+            lblDiceRollPlayer2.Text = string.Format("Dice Roll : {0}", MyGameInstance.GamePlayers.GamePlayers[0].DiceRoll.ToString());
+            lblTokensPlayer1.Text = string.Format("Tokens\n{0}", MyGameInstance.GamePlayers.GamePlayers[1].Tokens.ToString());
+            lblTokensPlayer2.Text = string.Format("Tokens\n{0}", MyGameInstance.GamePlayers.GamePlayers[0].Tokens.ToString());
             lblTotalTokens.Text = MyGameInstance.Tokens.ToString();
             EnableCurrentPlayerControls();
         }
@@ -111,7 +119,7 @@ namespace _421Game
                     SetMainComponentsState(false);
                     lblPlayer1.Enabled = true;
                     lblPlaysPlayer1.Enabled = true;
-                    lblScorePlayer1.Enabled = true;
+                    lblDiceRollPlayer1.Enabled = true;
                     lblTokensPlayer1.Enabled = true;
                     lblTotalTokens.Enabled = true;
                     lblPhase.Enabled = true;
@@ -124,7 +132,7 @@ namespace _421Game
                     SetMainComponentsState(false);
                     lblPlayer2.Enabled = true;
                     lblPlaysPlayer2.Enabled = true;
-                    lblScorePlayer2.Enabled = true;
+                    lblDiceRollPlayer2.Enabled = true;
                     lblTokensPlayer2.Enabled = true;
                     lblTotalTokens.Enabled = true;
                     lblPhase.Enabled = true;
