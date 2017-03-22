@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DiceControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GameInstance.cs" />
     <Compile Include="GameWindow.cs">
       <SubType>Form</SubType>

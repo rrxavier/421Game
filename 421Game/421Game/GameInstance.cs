@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace _421Game
 {
@@ -33,26 +30,22 @@ namespace _421Game
 
         public Dice Dice1
         {
-            get
-            { return _dice1; }
+            get { return _dice1; }
         }
 
         public Dice Dice2
         {
-            get
-            { return _dice2; }
+            get { return _dice2; }
         }
 
         public Dice Dice3
         {
-            get
-            { return _dice3; }
+            get { return _dice3; }
         }
 
         public Players GamePlayers
         {
-            get
-            { return _players; }
+            get { return _players; }
             set { _players = value; }
         }
 
@@ -223,7 +216,7 @@ namespace _421Game
             {
                 this._username = username;
                 this._id = id;
-                this._playsLeft = 0;
+                this._playsLeft = 1;
                 this._diceRoll = 000;
                 this._tokens = 0;
             }
@@ -393,7 +386,7 @@ namespace _421Game
                 return Value.ToString();
             }
         }*/
-        
+
         /// <summary>
         /// Class that returns the correct Combination.
         /// </summary>
@@ -417,56 +410,56 @@ namespace _421Game
 
             private static bool Is421(int diceRoll)
             {
-                    if (diceRoll == 421)
-                        return true;
-                    else
-                        return false;
+                if (diceRoll == 421)
+                    return true;
+                else
+                    return false;
             }
 
             private static bool IsMac(int diceRoll)
             {
-                    // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
-                    // So ifthe modulo returns 0, it means that there are two numbers that are the same.
-                    if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0)
-                        return true;
-                    else
-                        return false;
+                // I do a modulo of 11 on the two last numbers AND the two first because the possible combinations are : 11, 22, 33, 44, etc..
+                // So ifthe modulo returns 0, it means that there are two numbers that are the same.
+                if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 || Convert.ToInt32(diceRoll.ToString().Substring(0, 2)) % 11 == 0)
+                    return true;
+                else
+                    return false;
             }
 
             private static bool IsBrelan(int diceRoll)
             {
-                    // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
-                    // So if the modulo returns 0, it means that there are two numbers that are the same.
-                    // Then, I check if the first digit is the same as the last one.
-                    if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 && diceRoll.ToString()[0] == diceRoll.ToString()[2])
-                        return true;
-                    else
-                        return false;
+                // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
+                // So if the modulo returns 0, it means that there are two numbers that are the same.
+                // Then, I check if the first digit is the same as the last one.
+                if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 && diceRoll.ToString()[0] == diceRoll.ToString()[2])
+                    return true;
+                else
+                    return false;
             }
 
             private static bool IsSuite(int diceRoll)
             {
-                    var digitsList = new List<int>();
+                var digitsList = new List<int>();
 
-                    // Taking each digit individually
-                    for (int tmpValue = diceRoll; tmpValue != 0; tmpValue /= 10)
-                        digitsList.Add(tmpValue % 10);
+                // Taking each digit individually
+                for (int tmpValue = diceRoll; tmpValue != 0; tmpValue /= 10)
+                    digitsList.Add(tmpValue % 10);
 
-                    int[] digitsArray = digitsList.ToArray();
-                    Array.Reverse(digitsArray);
+                int[] digitsArray = digitsList.ToArray();
+                Array.Reverse(digitsArray);
 
-                    if (digitsArray[2] + 1 == digitsArray[1] && digitsArray[1] + 1 == digitsArray[0])
-                        return true;
-                    else
-                        return false;
+                if (digitsArray[2] + 1 == digitsArray[1] && digitsArray[1] + 1 == digitsArray[0])
+                    return true;
+                else
+                    return false;
             }
 
             private static bool IsNenette(int diceRoll)
             {
-                    if (diceRoll == 221)
-                        return true;
-                    else
-                        return false;
+                if (diceRoll == 221)
+                    return true;
+                else
+                    return false;
             }
 
             private static Combination Get421()
@@ -477,7 +470,7 @@ namespace _421Game
             private static Combination GetMac(int diceRoll)
             {
                 int tokenValue = Convert.ToInt32(diceRoll.ToString()[0].ToString());
-                    return new Combination(5, tokenValue, "Mac");
+                return new Combination(5, tokenValue, "Mac");
             }
 
             private static Combination GetBrelan(int diceRoll)
