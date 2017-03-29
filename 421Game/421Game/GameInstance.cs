@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace _421Game
 {
@@ -12,6 +10,7 @@ namespace _421Game
         private Dice _dice3;
         private Players _players;
         private int _tokens;
+        private int _phase;
 
         public GameInstance(string player1, string player2)
         {
@@ -21,6 +20,7 @@ namespace _421Game
             this._dice2 = new Dice();
             this._dice3 = new Dice();
             this._tokens = 20;
+            this._phase = 0;
         }
 
         /// <summary>
@@ -80,20 +80,22 @@ namespace _421Game
         }
 
         public void CurrentPlayerTakes()
-        {
+        {  
+            // If both players played.
             if (GamePlayers.GamePlayers[0].DiceRoll > 0 && GamePlayers.GamePlayers[1].DiceRoll > 0)
             {
+                // If the first has the biggest combination.
                 if (GamePlayers.GamePlayers[0].Combi.Priority > GamePlayers.GamePlayers[1].Combi.Priority)
                 {
                     GamePlayers.GamePlayers[1].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
                     Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;
                 }
-                else if (GamePlayers.GamePlayers[0].Combi.Priority < GamePlayers.GamePlayers[1].Combi.Priority)
+                else if (GamePlayers.GamePlayers[0].Combi.Priority < GamePlayers.GamePlayers[1].Combi.Priority) // If the second has the biggest combination.
                 {
                     GamePlayers.GamePlayers[0].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
                     Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;
                 }
-                else
+                else // If they both have the same combination.
                 {
                     if (GamePlayers.GamePlayers[0].DiceRoll > GamePlayers.GamePlayers[1].DiceRoll)
                     {
@@ -124,140 +126,6 @@ namespace _421Game
             Dice1.Reset();
             Dice2.Reset();
             Dice3.Reset();
-        }
-
-        public class Dice
-        {
-            private int _lastRoll;
-
-            public Dice()
-            {
-                _lastRoll = -1;
-            }
-
-            /// <summary>
-            /// The value of the last roll. If this contains 0, it means that the Dice hasn't been rolled yet.
-            /// </summary>
-            public int LastRoll
-            {
-                get { return _lastRoll; }
-            }
-
-            /// <summary>
-            /// Roll a number between 1 and 6.
-            /// </summary>
-            public void Roll()
-            {
-                // 7 Because the last value's exclusive.
-                _lastRoll = new Random().Next(1, 7);
-                Thread.Sleep(25);
-            }
-
-            public void Reset()
-            {
-                this._lastRoll = 0;
-            }
-
-            public override string ToString()
-            {
-                return LastRoll.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Class for a better handling of all players. Uses the Player class.
-        /// </summary>
-        public class Players
-        {
-            Player[] _playersArray;
-            Player _currentPlayer;
-
-            public Players(Player[] playersArray)
-            {
-                this._playersArray = playersArray;
-                this._currentPlayer = _playersArray[new Random().Next(0, 2)];
-            }
-
-            public Player[] GamePlayers
-            {
-                get { return _playersArray; }
-            }
-
-            public Player CurrentPlayer
-            {
-                get { return _currentPlayer; }
-                set { _currentPlayer = value; }
-            }
-
-            public void NextPlayer()
-            {
-                this._currentPlayer = GamePlayers[this.CurrentPlayer.Id];
-            }
-
-            public void ResetRolls()
-            {
-                _playersArray[0].ResetRoll();
-                _playersArray[1].ResetRoll();
-            }
-        }
-
-        /// <summary>
-        /// Class for a better handling of one player.
-        /// </summary>
-        public class Player
-        {
-            string _username;
-            int _id;
-            int _playsLeft;
-            int _diceRoll;
-            int _tokens;
-
-            public Player(string username, int id)
-            {
-                this._username = username;
-                this._id = id;
-                this._playsLeft = 1;
-                this._diceRoll = 000;
-                this._tokens = 0;
-            }
-
-            public string Username
-            {
-                get { return _username; }
-            }
-
-            public int Id
-            {
-                get { return _id; }
-            }
-
-            public int PlaysLeft
-            {
-                get { return _playsLeft; }
-                set { _playsLeft = value; }
-            }
-
-            public int DiceRoll
-            {
-                get { return _diceRoll; }
-                set { _diceRoll = value; }
-            }
-
-            public Combination Combi
-            {
-                get { return Combinations.GetCorrectCombination(this._diceRoll); }
-            }
-
-            public int Tokens
-            {
-                get { return _tokens; }
-                set { _tokens = value; }
-            }
-
-            public void ResetRoll()
-            {
-                DiceRoll = 000;
-            }
         }
 
         /// <summary>
@@ -386,145 +254,5 @@ namespace _421Game
                 return Value.ToString();
             }
         }*/
-
-        /// <summary>
-        /// Class that returns the correct Combination.
-        /// </summary>
-        public static class Combinations
-        {
-            public static Combination GetCorrectCombination(int diceRoll)
-            {
-                if (Is421(diceRoll))
-                    return Get421();
-                else if (IsMac(diceRoll))
-                    return GetMac(diceRoll);
-                else if (IsBrelan(diceRoll))
-                    return GetBrelan(diceRoll);
-                else if (IsSuite(diceRoll))
-                    return GetSuite();
-                else if (IsNenette(diceRoll))
-                    return GetNennette();
-                else
-                    return GetOther();
-            }
-
-            private static bool Is421(int diceRoll)
-            {
-                if (diceRoll == 421)
-                    return true;
-                else
-                    return false;
-            }
-
-            private static bool IsMac(int diceRoll)
-            {
-                // I do a modulo of 11 on the two last numbers AND the two first because the possible combinations are : 11, 22, 33, 44, etc..
-                // So ifthe modulo returns 0, it means that there are two numbers that are the same.
-                if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 || Convert.ToInt32(diceRoll.ToString().Substring(0, 2)) % 11 == 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            private static bool IsBrelan(int diceRoll)
-            {
-                // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
-                // So if the modulo returns 0, it means that there are two numbers that are the same.
-                // Then, I check if the first digit is the same as the last one.
-                if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 && diceRoll.ToString()[0] == diceRoll.ToString()[2])
-                    return true;
-                else
-                    return false;
-            }
-
-            private static bool IsSuite(int diceRoll)
-            {
-                var digitsList = new List<int>();
-
-                // Taking each digit individually
-                for (int tmpValue = diceRoll; tmpValue != 0; tmpValue /= 10)
-                    digitsList.Add(tmpValue % 10);
-
-                int[] digitsArray = digitsList.ToArray();
-                Array.Reverse(digitsArray);
-
-                if (digitsArray[2] + 1 == digitsArray[1] && digitsArray[1] + 1 == digitsArray[0])
-                    return true;
-                else
-                    return false;
-            }
-
-            private static bool IsNenette(int diceRoll)
-            {
-                if (diceRoll == 221)
-                    return true;
-                else
-                    return false;
-            }
-
-            private static Combination Get421()
-            {
-                return new Combination(6, 10, "421");
-            }
-
-            private static Combination GetMac(int diceRoll)
-            {
-                int tokenValue = Convert.ToInt32(diceRoll.ToString()[0].ToString());
-                return new Combination(5, tokenValue, "Mac");
-            }
-
-            private static Combination GetBrelan(int diceRoll)
-            {
-                int tokenValue = Convert.ToInt32(diceRoll.ToString()[0].ToString());
-                return new Combination(4, tokenValue, "Brelan");
-            }
-
-            private static Combination GetSuite()
-            {
-                return new Combination(3, 2, "Suite");
-            }
-
-            private static Combination GetNennette()
-            {
-                return new Combination(2, 4, "Nennette");
-            }
-
-            private static Combination GetOther()
-            {
-                return new Combination(1, 1, "Normal combination");
-            }
-        }
-
-        /// <summary>
-        /// Combination class.
-        /// </summary>
-        public struct Combination
-        {
-            int _priority;
-            int _tokenValue;
-            string _name;
-
-            public Combination(int priority, int tokenValue, string name)
-            {
-                this._name = name;
-                this._priority = priority;
-                this._tokenValue = tokenValue;
-            }
-
-            public int Priority
-            {
-                get { return _priority; }
-            }
-
-            public int TokenValue
-            {
-                get { return _tokenValue; }
-            }
-
-            public string Name
-            {
-                get { return _name; }
-            }
-        }
     }
 }

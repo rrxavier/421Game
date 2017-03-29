@@ -1,21 +1,20 @@
 ﻿/**
- * Régles :
- * Première phase : Charge
- * Les 20 pions sont distribués avec la règle de distribution.
- * Pas besoin d'intervention de l'utilisateur.
- * Deuxième phase : Décharge
- * Les joueurs s'affrontent.
- * Le joueur qui perd peut jouer jusqu'à 3 fois ce tour.
- * Le joueur qui n'a plus de pions gagne.
- **/
+* Régles :
+* Première phase : Charge
+* Les 20 pions sont distribués avec la règle de distribution.
+* Pas besoin d'intervention de l'utilisateur.
+* Deuxième phase : Décharge
+* Les joueurs s'affrontent.
+* Le joueur qui perd peut jouer jusqu'à 3 fois ce tour.
+* Le joueur qui n'a plus de pions gagne.
+**/
 
 /** 
- * Distribution : 
- * La personne qui tire la combinaison la plus haute fait prendre des pions à l'autre.
- * Il y a des combinaisons plus fortes que d'autres.
- **/
+* Distribution : 
+* La personne qui tire la combinaison la plus haute fait prendre des pions à l'autre.
+* Il y a des combinaisons plus fortes que d'autres.
+**/
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace _421Game
@@ -111,7 +110,7 @@ namespace _421Game
                     gbxDice.Enabled = true;
                     btnNewGame.Enabled = true;
                     btnTake.Enabled = ((MyGameInstance.Dice1.LastRoll == 0 && MyGameInstance.Dice1.LastRoll == 0 && MyGameInstance.Dice1.LastRoll == 0) ||
-                        (MyGameInstance.Dice1.LastRoll == -1 && MyGameInstance.Dice1.LastRoll == -1 && MyGameInstance.Dice1.LastRoll == -1)) ? false : true;
+                    (MyGameInstance.Dice1.LastRoll == -1 && MyGameInstance.Dice1.LastRoll == -1 && MyGameInstance.Dice1.LastRoll == -1)) ? false : true;
                     btnRoll.Enabled = MyGameInstance.GamePlayers.CurrentPlayer.PlaysLeft > 0 ? true : false;
                     break;
                 case 1:
@@ -125,7 +124,7 @@ namespace _421Game
                     gbxDice.Enabled = true;
                     btnNewGame.Enabled = true;
                     btnTake.Enabled = ((MyGameInstance.Dice1.LastRoll == 0 && MyGameInstance.Dice1.LastRoll == 0 && MyGameInstance.Dice1.LastRoll == 0) ||
-                        (MyGameInstance.Dice1.LastRoll == -1 && MyGameInstance.Dice1.LastRoll == -1 && MyGameInstance.Dice1.LastRoll == -1)) ? false : true;
+                    (MyGameInstance.Dice1.LastRoll == -1 && MyGameInstance.Dice1.LastRoll == -1 && MyGameInstance.Dice1.LastRoll == -1)) ? false : true;
                     btnRoll.Enabled = MyGameInstance.GamePlayers.CurrentPlayer.PlaysLeft > 0 ? true : false;
                     break;
             }
@@ -133,7 +132,7 @@ namespace _421Game
 
         private void Roll(object sender, EventArgs e)
         {
-            MyGameInstance.RollDices(true, true, true);
+            MyGameInstance.RollDices(!pbxDice1.Checked, !pbxDice2.Checked, !pbxDice3.Checked);
             RefreshView();
         }
 
@@ -141,7 +140,6 @@ namespace _421Game
         {
             MyGameInstance.CurrentPlayerTakes();
 
-            // TO CHECK
             lblDiceRollPlayer1.Text = string.Format("Dice Roll : {0}", MyGameInstance.GamePlayers.GamePlayers[1].DiceRoll.ToString());
             lblDiceRollPlayer2.Text = string.Format("Dice Roll : {0}", MyGameInstance.GamePlayers.GamePlayers[0].DiceRoll.ToString());
 
