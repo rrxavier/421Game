@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace _421Game
 {
@@ -10,7 +11,7 @@ namespace _421Game
         private Dice _dice3;
         private Players _players;
         private int _tokens;
-        private int _phase;
+        private Phases _phase;
 
         public GameInstance(string player1, string player2)
         {
@@ -20,7 +21,7 @@ namespace _421Game
             this._dice2 = new Dice();
             this._dice3 = new Dice();
             this._tokens = 20;
-            this._phase = 0;
+            this._phase = Phases.Load;
         }
 
         /// <summary>
@@ -80,37 +81,42 @@ namespace _421Game
         }
 
         public void CurrentPlayerTakes()
-        {  
+        {
             // If both players played.
             if (GamePlayers.GamePlayers[0].DiceRoll > 0 && GamePlayers.GamePlayers[1].DiceRoll > 0)
             {
                 // If the first has the biggest combination.
                 if (GamePlayers.GamePlayers[0].Combi.Priority > GamePlayers.GamePlayers[1].Combi.Priority)
                 {
-                    GamePlayers.GamePlayers[1].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
-                    Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;
+                    /*GamePlayers.GamePlayers[1].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
+                    Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;*/
+                    ProcessTokenMovement(GamePlayers.GamePlayers[1], GamePlayers.GamePlayers[0].Combi.TokenValue);
                 }
                 else if (GamePlayers.GamePlayers[0].Combi.Priority < GamePlayers.GamePlayers[1].Combi.Priority) // If the second has the biggest combination.
                 {
-                    GamePlayers.GamePlayers[0].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
-                    Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;
+                    /*GamePlayers.GamePlayers[0].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
+                    Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;*/
+                    ProcessTokenMovement(GamePlayers.GamePlayers[0], GamePlayers.GamePlayers[1].Combi.TokenValue);
                 }
                 else // If they both have the same combination.
                 {
                     if (GamePlayers.GamePlayers[0].DiceRoll > GamePlayers.GamePlayers[1].DiceRoll)
                     {
-                        GamePlayers.GamePlayers[1].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
-                        Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;
+                        /*GamePlayers.GamePlayers[1].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
+                        Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;*/
+                        ProcessTokenMovement(GamePlayers.GamePlayers[1], GamePlayers.GamePlayers[0].Combi.TokenValue);
                     }
                     else if (GamePlayers.GamePlayers[0].DiceRoll < GamePlayers.GamePlayers[1].DiceRoll)
                     {
-                        GamePlayers.GamePlayers[0].Tokens += GamePlayers.GamePlayers[0].Combi.TokenValue;
-                        Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;
+                        /*GamePlayers.GamePlayers[0].Tokens += GamePlayers.GamePlayers[1].Combi.TokenValue;
+                        Tokens -= GamePlayers.GamePlayers[0].Combi.TokenValue;*/
+                        ProcessTokenMovement(GamePlayers.GamePlayers[0], GamePlayers.GamePlayers[1].Combi.TokenValue);
                     }
                 }
 
                 GamePlayers.ResetRolls();
                 GamePlayers.CurrentPlayer.PlaysLeft = 1;
+                MessageBox.Show("TEST");
                 ResetDices();
             }
             else
@@ -129,130 +135,66 @@ namespace _421Game
         }
 
         /// <summary>
-        /// Class for a better handling of the players scores.
+        /// Moves an amount of tokens from the token pool to a player's token pool.
         /// </summary>
-        /*public class Score
+        /// <param name="loser">The players who gets the tokens.</param>
+        /// <param name="amount">The amount of tokens to move.</param>
+        /// <returns>True if we have to change phase, false if we don't.</returns>
+        private bool MoveTokenFromPool(ref Player loser, int amount)
         {
-            private int _value;
-
-            public Score(int value)
+            if (this.Tokens - amount >= 0)
             {
-                this._value = value;
+                this.Tokens -= amount;
+                loser.Tokens += amount;
+
+                return false;
             }
-
-            private Score() : this(000) { }
-
-            public int Value
+            else
             {
-                get { return _value; }
-            }
+                loser.Tokens += this.Tokens;
+                this.Tokens = 0;
 
-            public int Priority
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Moves an amount of tokens from a player to the other.
+        /// </summary>
+        /// <param name="loser">The players who gets the tokens.</param>
+        /// <param name="amount">The amount of tokens to move.</param>
+        /// <returns>True if we have to change phase, false if we don't.</returns>
+        private bool MoveTokenFromPlayer(ref Player loser, int amount)
+        {
+            Player winner = this.GamePlayers.GamePlayers[loser.Id];
+            if (winner.Tokens - amount >= 0)
             {
-                get
-                {
-                    int priority;
-                    if (this.Is421)
-                        priority = 6;
-                    else if (this.IsMac)
-                        priority = 5;
-                    else if (this.IsBrelan)
-                        priority = 4;
-                    else if (this.IsSuite)
-                        priority = 3;
-                    else if (this.IsNenette)
-                        priority = 2;
-                    else
-                        priority = 1;
-                    return priority;
-                }
-            }
+                winner.Tokens -= amount;
+                loser.Tokens += amount;
 
-            private bool Is421
+                return false;
+            }
+            else
             {
-                get
-                {
-                    if (this.Value == 421)
-                        return true;
-                    else
-                        return false;
-                }
-            }
+                loser.Tokens += winner.Tokens;
+                winner.Tokens = 0;
 
-            private bool IsMac
+                return true;
+            }
+        }
+
+        private void ProcessTokenMovement(Player loser, int amount)
+        {
+            if (this._phase == Phases.Load)
             {
-                get
-                {
-                    // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
-                    // So ifthe modulo returns 0, it means that there are two numbers that are the same.
-                    if (Convert.ToInt32(this.Value.ToString().Substring(1)) % 11 == 0)
-                        return true;
-                    else
-                        return false;
-                }
+                if (MoveTokenFromPool(ref loser, amount))
+                    this._phase = Phases.Unload;
             }
+            else if (this._phase == Phases.Load)
+                if (MoveTokenFromPlayer(ref loser, amount))
+                    this._phase = Phases.Unload;
+        }
 
-            private bool IsBrelan
-            {
-                get
-                {
-                    // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
-                    // So if the modulo returns 0, it means that there are two numbers that are the same.
-                    // Then, I check if the first digit is the same as the last one.
-                    if (Convert.ToInt32(this.Value.ToString().Substring(1)) % 11 == 0 && this.Value.ToString()[0] == this.Value.ToString()[2])
-                        return true;
-                    else
-                        return false;
-                }
-            }
-
-            private bool IsSuite
-            {
-                get
-                {
-                    var digitsList = new List<int>();
-
-                    // Taking each digit individually
-                    for (int tmpValue = this.Value; tmpValue != 0; tmpValue /= 10)
-                        digitsList.Add(tmpValue % 10);
-
-                    int[] digitsArray = digitsList.ToArray();
-                    Array.Reverse(digitsArray);
-
-                    if (digitsArray[2] + 1 == digitsArray[1] && digitsArray[1] + 1 == digitsArray[0])
-                        return true;
-                    else
-                        return false;
-                }
-            }
-
-            private bool IsNenette
-            {
-                get
-                {
-                    if (this.Value == 221)
-                        return true;
-                    else
-                        return false;
-                }
-            }
-
-            // For Score = Int
-            public static implicit operator Score(int val)
-            {
-                return new Score(val);
-            }
-
-            // For Int = Score
-            public static implicit operator int(Score score)
-            {
-                return score.Value;
-            }
-
-            public override string ToString()
-            {
-                return Value.ToString();
-            }
-        }*/
+        public enum Phases : int { Load, Unload, Finished }   // enum that defines in which phase we're in.
     }
 }

@@ -27,7 +27,7 @@ namespace _421Game
         {
             // 7 Because the last value's exclusive.
             _lastRoll = new Random().Next(1, 7);
-            Thread.Sleep(25);
+            Thread.Sleep(25);   // Avoids the Random to take the same numbers.
         }
 
         public void Reset()

@@ -36,7 +36,8 @@ namespace _421Game
         {
             // I do a modulo of 11 on the two last numbers AND the two first because the possible combinations are : 11, 22, 33, 44, etc..
             // So ifthe modulo returns 0, it means that there are two numbers that are the same.
-            if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 || Convert.ToInt32(diceRoll.ToString().Substring(0, 2)) % 11 == 0)
+            // I return false if the diceroll equals 221 because that is the "Nennette" combination.
+            if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 || Convert.ToInt32(diceRoll.ToString().Substring(0, 2)) % 11 == 0 && diceRoll != 221)
                 return true;
             else
                 return false;
@@ -47,7 +48,8 @@ namespace _421Game
             // I do a modulo of 11 on the two last numbers because the possible combinations are : 11, 22, 33, 44, etc..
             // So if the modulo returns 0, it means that there are two numbers that are the same.
             // Then, I check if the first digit is the same as the last one.
-            if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 && diceRoll.ToString()[0] == diceRoll.ToString()[2])
+            // I return false if the diceroll equals 221 because that is the "Nennette" combination.
+            if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 && diceRoll.ToString()[0] == diceRoll.ToString()[2] && diceRoll != 221)
                 return true;
             else
                 return false;

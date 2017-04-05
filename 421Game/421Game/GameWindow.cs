@@ -138,10 +138,10 @@ namespace _421Game
 
         private void Take(object sender, EventArgs e)
         {
-            MyGameInstance.CurrentPlayerTakes();
-
             lblDiceRollPlayer1.Text = string.Format("Dice Roll : {0}", MyGameInstance.GamePlayers.GamePlayers[1].DiceRoll.ToString());
             lblDiceRollPlayer2.Text = string.Format("Dice Roll : {0}", MyGameInstance.GamePlayers.GamePlayers[0].DiceRoll.ToString());
+
+            MyGameInstance.CurrentPlayerTakes();
 
             RefreshView();
         }
