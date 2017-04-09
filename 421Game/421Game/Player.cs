@@ -10,6 +10,7 @@
         int _playsLeft;
         int _diceRoll;
         int _tokens;
+        int _lastRoll;
 
         public Player(string username, int id)
         {
@@ -17,6 +18,7 @@
             this._id = id;
             this._playsLeft = 1;
             this._diceRoll = 000;
+            this._lastRoll = 0;
             this._tokens = 0;
         }
 
@@ -51,6 +53,12 @@
         {
             get { return _tokens; }
             set { _tokens = value; }
+        }
+
+        public int LastRoll
+        {
+            get { return this._lastRoll; }
+            set { this._lastRoll = value; }
         }
 
         public void ResetRoll()

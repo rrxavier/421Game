@@ -49,8 +49,7 @@
   <ItemGroup>
     <Compile Include="Combination.cs" />
     <Compile Include="Combinations.cs" />
-    <Compile Include="Dice.cs" />
-    <Compile Include="DiceControl.cs">
+    <Compile Include="Dice.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GameInstance.cs" />

@@ -42,13 +42,8 @@
             this.lblTokensPlayer2 = new System.Windows.Forms.Label();
             this.btnNewGame = new System.Windows.Forms.Button();
             this.lblPhase = new System.Windows.Forms.Label();
-            this.pbxDice3 = new _421Game.DiceControl();
-            this.pbxDice2 = new _421Game.DiceControl();
-            this.pbxDice1 = new _421Game.DiceControl();
-            this.gbxDice.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxDice3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxDice2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxDice1)).BeginInit();
+            this.lblLastRollPlayer2 = new System.Windows.Forms.Label();
+            this.lblLastRollPlayer1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblPlayer1
@@ -104,9 +99,6 @@
             // 
             // gbxDice
             // 
-            this.gbxDice.Controls.Add(this.pbxDice3);
-            this.gbxDice.Controls.Add(this.pbxDice1);
-            this.gbxDice.Controls.Add(this.pbxDice2);
             this.gbxDice.Location = new System.Drawing.Point(143, 59);
             this.gbxDice.Name = "gbxDice";
             this.gbxDice.Size = new System.Drawing.Size(448, 100);
@@ -183,41 +175,30 @@
             this.lblPhase.Text = "label1";
             this.lblPhase.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // pbxDice3
+            // lblLastRollPlayer2
             // 
-            this.pbxDice3.ImgName = null;
-            this.pbxDice3.Location = new System.Drawing.Point(349, 19);
-            this.pbxDice3.Name = "pbxDice3";
-            this.pbxDice3.Size = new System.Drawing.Size(75, 75);
-            this.pbxDice3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbxDice3.TabIndex = 20;
-            this.pbxDice3.TabStop = false;
+            this.lblLastRollPlayer2.Location = new System.Drawing.Point(625, 135);
+            this.lblLastRollPlayer2.Name = "lblLastRollPlayer2";
+            this.lblLastRollPlayer2.Size = new System.Drawing.Size(101, 13);
+            this.lblLastRollPlayer2.TabIndex = 15;
+            this.lblLastRollPlayer2.Text = "label1";
+            this.lblLastRollPlayer2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // pbxDice2
+            // lblLastRollPlayer1
             // 
-            this.pbxDice2.ImgName = null;
-            this.pbxDice2.Location = new System.Drawing.Point(187, 19);
-            this.pbxDice2.Name = "pbxDice2";
-            this.pbxDice2.Size = new System.Drawing.Size(75, 75);
-            this.pbxDice2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbxDice2.TabIndex = 19;
-            this.pbxDice2.TabStop = false;
-            // 
-            // pbxDice1
-            // 
-            this.pbxDice1.ImgName = null;
-            this.pbxDice1.Location = new System.Drawing.Point(25, 19);
-            this.pbxDice1.Name = "pbxDice1";
-            this.pbxDice1.Size = new System.Drawing.Size(75, 75);
-            this.pbxDice1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbxDice1.TabIndex = 15;
-            this.pbxDice1.TabStop = false;
+            this.lblLastRollPlayer1.Location = new System.Drawing.Point(12, 135);
+            this.lblLastRollPlayer1.Name = "lblLastRollPlayer1";
+            this.lblLastRollPlayer1.Size = new System.Drawing.Size(103, 13);
+            this.lblLastRollPlayer1.TabIndex = 16;
+            this.lblLastRollPlayer1.Text = "label1";
             // 
             // GameWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(738, 558);
+            this.ClientSize = new System.Drawing.Size(738, 391);
+            this.Controls.Add(this.lblLastRollPlayer1);
+            this.Controls.Add(this.lblLastRollPlayer2);
             this.Controls.Add(this.lblPhase);
             this.Controls.Add(this.btnNewGame);
             this.Controls.Add(this.lblTokensPlayer2);
@@ -234,10 +215,6 @@
             this.Controls.Add(this.lblPlayer1);
             this.Name = "GameWindow";
             this.Text = "Form1";
-            this.gbxDice.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbxDice3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxDice2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxDice1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -258,9 +235,8 @@
         private System.Windows.Forms.Label lblTokensPlayer2;
         private System.Windows.Forms.Button btnNewGame;
         private System.Windows.Forms.Label lblPhase;
-        private DiceControl pbxDice3;
-        private DiceControl pbxDice2;
-        private DiceControl pbxDice1;
+        private System.Windows.Forms.Label lblLastRollPlayer2;
+        private System.Windows.Forms.Label lblLastRollPlayer1;
     }
 }
 

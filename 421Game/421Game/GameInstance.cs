@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace _421Game
@@ -56,19 +58,24 @@ namespace _421Game
             private set { _tokens = value; }
         }
 
+        public Phases Phase
+        {
+            get { return this._phase; }
+        }
+
         /// <summary>
         /// Roll the dices and return their values.
         /// </summary>
         /// <param name="dice1">First dice. If true, the dice value will be processed again.</param>
         /// <param name="dice2">Second dice. If true, the dice value will be processed again.</param>
         /// <param name="dice3">Third dice. If true, the dice value will be processed again.</param>
-        public void RollDices(bool dice1, bool dice2, bool dice3)
+        public void RollDices()
         {
-            if (dice1)
+            if (!this.Dice1.Checked)
                 Dice1.Roll();
-            if (dice2)
+            if (!this.Dice2.Checked)
                 Dice2.Roll();
-            if (dice3)
+            if (!this.Dice3.Checked)
                 Dice3.Roll();
 
             // Sorts the score so it's shown from the bigger number to the lowest.
@@ -82,6 +89,9 @@ namespace _421Game
 
         public void CurrentPlayerTakes()
         {
+            Dice1.Checked = false;
+            Dice2.Checked = false;
+            Dice3.Checked = false;
             // If both players played.
             if (GamePlayers.GamePlayers[0].DiceRoll > 0 && GamePlayers.GamePlayers[1].DiceRoll > 0)
             {
@@ -114,15 +124,20 @@ namespace _421Game
                     }
                 }
 
+                Debug.Print("{0} & {1}", GamePlayers.GamePlayers[0].Combi.Name, GamePlayers.GamePlayers[1].Combi.Name);
+
+                GamePlayers.GamePlayers[0].LastRoll = GamePlayers.GamePlayers[0].DiceRoll;
+                GamePlayers.GamePlayers[1].LastRoll = GamePlayers.GamePlayers[1].DiceRoll;
                 GamePlayers.ResetRolls();
-                GamePlayers.CurrentPlayer.PlaysLeft = 1;
-                MessageBox.Show("TEST");
+                GamePlayers.CurrentPlayer.PlaysLeft = 3;
+                GamePlayers.GamePlayers[GamePlayers.CurrentPlayer.Id].PlaysLeft = 1;
+                ClickableDices();
                 ResetDices();
             }
             else
             {
                 GamePlayers.NextPlayer();
-                GamePlayers.CurrentPlayer.PlaysLeft = 1;
+                UnclickableDices();
                 ResetDices();
             }
         }
@@ -134,6 +149,20 @@ namespace _421Game
             Dice3.Reset();
         }
 
+        private void ClickableDices()
+        {
+            this.Dice1.Clickable = true;
+            this.Dice2.Clickable = true;
+            this.Dice3.Clickable = true;
+        }
+
+        private void UnclickableDices()
+        {
+            this.Dice1.Clickable = false;
+            this.Dice2.Clickable = false;
+            this.Dice3.Clickable = false;
+        }
+
         /// <summary>
         /// Moves an amount of tokens from the token pool to a player's token pool.
         /// </summary>
@@ -142,7 +171,8 @@ namespace _421Game
         /// <returns>True if we have to change phase, false if we don't.</returns>
         private bool MoveTokenFromPool(ref Player loser, int amount)
         {
-            if (this.Tokens - amount >= 0)
+            this.GamePlayers.CurrentPlayer = loser;
+            if (this.Tokens - amount > 0)
             {
                 this.Tokens -= amount;
                 loser.Tokens += amount;
@@ -166,8 +196,9 @@ namespace _421Game
         /// <returns>True if we have to change phase, false if we don't.</returns>
         private bool MoveTokenFromPlayer(ref Player loser, int amount)
         {
+            this.GamePlayers.CurrentPlayer = loser;
             Player winner = this.GamePlayers.GamePlayers[loser.Id];
-            if (winner.Tokens - amount >= 0)
+            if (winner.Tokens - amount > 0)
             {
                 winner.Tokens -= amount;
                 loser.Tokens += amount;
@@ -188,11 +219,16 @@ namespace _421Game
             if (this._phase == Phases.Load)
             {
                 if (MoveTokenFromPool(ref loser, amount))
-                    this._phase = Phases.Unload;
+                {
+                    if (GamePlayers.GamePlayers[0].Tokens > 0 && GamePlayers.GamePlayers[0].Tokens < 20)    // If both players still have tokens.
+                        this._phase = Phases.Unload;
+                    else                                                                                    // If one of the players already won.
+                        this._phase = Phases.Finished;
+                }
             }
-            else if (this._phase == Phases.Load)
+            else if (this._phase == Phases.Unload)
                 if (MoveTokenFromPlayer(ref loser, amount))
-                    this._phase = Phases.Unload;
+                    this._phase = Phases.Finished;
         }
 
         public enum Phases : int { Load, Unload, Finished }   // enum that defines in which phase we're in.

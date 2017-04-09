@@ -37,7 +37,7 @@ namespace _421Game
             // I do a modulo of 11 on the two last numbers AND the two first because the possible combinations are : 11, 22, 33, 44, etc..
             // So ifthe modulo returns 0, it means that there are two numbers that are the same.
             // I return false if the diceroll equals 221 because that is the "Nennette" combination.
-            if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 || Convert.ToInt32(diceRoll.ToString().Substring(0, 2)) % 11 == 0 && diceRoll != 221)
+            if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0 || Convert.ToInt32(diceRoll.ToString().Substring(1, 2)) % 11 == 0 && diceRoll != 221)
                 return true;
             else
                 return false;
@@ -87,13 +87,17 @@ namespace _421Game
 
         private static Combination GetMac(int diceRoll)
         {
-            int tokenValue = Convert.ToInt32(diceRoll.ToString()[0].ToString());
+            int tokenValue = 0;
+            if (Convert.ToInt32(diceRoll.ToString().Substring(1)) % 11 == 0)            // If it's the two first that are equal
+                tokenValue = Convert.ToInt32(diceRoll.ToString()[2].ToString());        // Take the last one
+            else if (Convert.ToInt32(diceRoll.ToString().Substring(1, 2)) % 11 == 0)    // If it's the last first that are equal
+                tokenValue = Convert.ToInt32(diceRoll.ToString()[0].ToString());        // Take the first one
             return new Combination(5, tokenValue, "Mac");
         }
 
         private static Combination GetBrelan(int diceRoll)
         {
-            int tokenValue = Convert.ToInt32(diceRoll.ToString()[0].ToString());
+            int tokenValue = diceRoll.ToString()[0] != '1' ? Convert.ToInt32(diceRoll.ToString()[0].ToString()) : 7;
             return new Combination(4, tokenValue, "Brelan");
         }
 
