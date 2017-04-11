@@ -61,6 +61,9 @@
             set { this._lastRoll = value; }
         }
 
+        /// <summary>
+        /// Resets the player's roll.
+        /// </summary>
         public void ResetRoll()
         {
             DiceRoll = 000;

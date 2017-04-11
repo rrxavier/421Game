@@ -23,7 +23,6 @@ namespace _421Game
     public partial class GameWindow : Form
     {
         GameInstance _myGameInstance;
-
         public GameWindow()
         {
             InitializeComponent();
@@ -74,6 +73,10 @@ namespace _421Game
             { _myGameInstance = value; }
         }
 
+        /// <summary>
+        /// Enables/Disables the components state.
+        /// </summary>
+        /// <param name="state">True = Enabled / False = Disabled</param>
         private void SetMainComponentsState(bool state)
         {
             lblPlayer1.Enabled = state;
@@ -93,6 +96,9 @@ namespace _421Game
             lblPhase.Enabled = state;
         }
 
+        /// <summary>
+        /// Set all the visual components to their correct values.
+        /// </summary>
         private void RefreshView()
         {
             MyGameInstance.Dice1.SetImage();
@@ -117,6 +123,9 @@ namespace _421Game
             }
         }
 
+        /// <summary>
+        /// Enables the current player controls.
+        /// </summary>
         private void EnableCurrentPlayerControls()
         {
             switch (MyGameInstance.GamePlayers.CurrentPlayer.Id)
@@ -154,6 +163,11 @@ namespace _421Game
             }
         }
 
+        /// <summary>
+        /// Button Roll click.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Roll(object sender, EventArgs e)
         {
             MyGameInstance.RollDices();
@@ -161,6 +175,11 @@ namespace _421Game
             btnTake.Focus();
         }
 
+        /// <summary>
+        /// Button Take click.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Take(object sender, EventArgs e)
         {
             MyGameInstance.CurrentPlayerTakes();

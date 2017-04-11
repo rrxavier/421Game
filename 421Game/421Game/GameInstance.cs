@@ -87,6 +87,9 @@ namespace _421Game
             GamePlayers.CurrentPlayer.PlaysLeft--;
         }
 
+        /// <summary>
+        /// The current player takes. If the player is the second to play, also resets both player scores and adds the correct number of tokens.
+        /// </summary>
         public void CurrentPlayerTakes()
         {
             Dice1.Checked = false;
@@ -142,6 +145,9 @@ namespace _421Game
             }
         }
 
+        /// <summary>
+        /// Resets the dices.
+        /// </summary>
         private void ResetDices()
         {
             Dice1.Reset();
@@ -149,6 +155,9 @@ namespace _421Game
             Dice3.Reset();
         }
 
+        /// <summary>
+        /// Make the dices clickable.
+        /// </summary>
         private void ClickableDices()
         {
             this.Dice1.Clickable = true;
@@ -156,6 +165,9 @@ namespace _421Game
             this.Dice3.Clickable = true;
         }
 
+        /// <summary>
+        /// Make the dices unclickable.
+        /// </summary>
         private void UnclickableDices()
         {
             this.Dice1.Clickable = false;
@@ -214,6 +226,11 @@ namespace _421Game
             }
         }
 
+        /// <summary>
+        /// Defines from where the tokens should be taken.
+        /// </summary>
+        /// <param name="loser">The player who lost.</param>
+        /// <param name="amount">The amount of tokens to move.</param>
         private void ProcessTokenMovement(Player loser, int amount)
         {
             if (this._phase == Phases.Load)
@@ -231,6 +248,9 @@ namespace _421Game
                     this._phase = Phases.Finished;
         }
 
-        public enum Phases : int { Load, Unload, Finished }   // enum that defines in which phase we're in.
+        /// <summary>
+        /// Enumeration that defines in which phase we're in.
+        /// </summary>
+        public enum Phases : int { Load, Unload, Finished } 
     }
 }

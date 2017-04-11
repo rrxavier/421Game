@@ -27,11 +27,17 @@ namespace _421Game
             set { _currentPlayer = value; }
         }
 
+        /// <summary>
+        /// Switches to the next player.
+        /// </summary>
         public void NextPlayer()
         {
             this._currentPlayer = GamePlayers[this.CurrentPlayer.Id];
         }
 
+        /// <summary>
+        /// Resets both players rolls.
+        /// </summary>
         public void ResetRolls()
         {
             _playersArray[0].ResetRoll();
